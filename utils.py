@@ -65,7 +65,7 @@ def plot_grid_visits(grid_visits, origin_Bx, origin_By, Lb_x, Lb_y):
     '''Plot the number of grid visits across the entire grid.'''
 
     plt.figure(figsize=(10,10))
-    plt.imshow(grid_visits, cmap = "nipy_spectral", origin='lower', vmin = 0, vmax = 9)
+    plt.imshow(grid_visits, cmap = "nipy_spectral", origin='lower')
     plt.plot([origin_Bx-(1/2), origin_Bx-(1/2)], [origin_By-(1/2), origin_By+Lb_y-(1/2)], color='yellow', linewidth=4 )
     plt.plot([origin_Bx-(1/2), origin_Bx+Lb_x-(1/2)], [origin_By-(1/2), origin_By-(1/2)], color='yellow', linewidth=4 )
     plt.plot([origin_Bx+Lb_x-(1/2), origin_Bx+Lb_x-(1/2)], [origin_By-(1/2), origin_By+Lb_y-(1/2)], color='yellow', linewidth=4 )

@@ -78,7 +78,7 @@ def evaluate(env, model, n_eval_episodes, max_timesteps, N, render):
     print(f"{std_order_params=}")
     print(f"{std_pos_rew=}")  
 
-    return mean_order_params, mean_reward, mean_grid_visits, mean_pos_rew, mean_avg_dispersion, std_reward, std_order_params, std_pos_rew  
+    return np.mean(np.array(order_params), axis=0), mean_reward, mean_grid_visits, mean_pos_rew, np.mean(np.array(avg_dispersion_all), axis=0), std_reward, std_order_params, std_pos_rew  
 
 
 
@@ -87,41 +87,51 @@ def evaluate(env, model, n_eval_episodes, max_timesteps, N, render):
 
 if __name__ == "__main__":
 
-    N = 4
-    k_a = 4
-    k_s = 8
-    theta_max  = np.pi /2
-    boundary_width = 0
-    Rv = 10000 # set radius of all drones to infinity (large number)
-    L = 50 + (2 * boundary_width)
-    La_x = 10
-    La_y = 10
-    Lb_x = 10
-    Lb_y = 10
-    origin_Ax = 20 + boundary_width
-    origin_Ay = 20+ boundary_width
-    origin_Bx = 20 # L - Lb_x - boundary_width - 1
-    origin_By = 30 # 1 + boundary_width
-    max_timesteps = 200
-    goal_reward = 1
-    swarm_factor = 0.5
-    collision_factor = 1
-    compactness_const = 1
-    reward_decay = 0.75
+    # Choose settings for the environment
+
+    N = 2 # N is the numer of drones the swarm consists of
+    k_a = 4 # k_a equally spaced angles for the actions in range [-theta_max, theta_max]
+    k_s = 8 # k_s equally spaced angles for the direction angle in the range [-pi, pi)
+    theta_max  = np.pi /2 # theta_max is the maximum turning angle
+    boundary_width = 0 # number of grid elements the boundary width consists of (0 means no boundary, currently the only setting that works because of periodic boundary conditions.)
+    Rv = 10000 # visibility Radius for each drone, (currently set to 1000 s.t. radius of all drones to infinity (large number))
+    L = 50 + (2 * boundary_width) # size of grid of total enviroment (LxL)
+    La_x = 10 # x-size of area A
+    La_y = 10 # y-size of area A
+    Lb_x = 10 # x-size of area B
+    Lb_y = 10 # y-size of area B
+    origin_Ax = 20 + boundary_width # x origin of area A
+    origin_Ay = 20+ boundary_width # y origin of area A
+    origin_Bx = 20 # x origin of area B
+    origin_By = 30  # y origin of area B
+    max_timesteps = 200 # maximum amount of timesteps to play game before truncation
+    goal_reward = 1 # initial positional reward value for the exploration area grid tiles
+    swarm_factor = 0.5 # swarm factor lambda in the reward function
+    collision_factor = 1 # collision factor xi in the reward function
+    compactness_const = 1 # compactness constant c
+    reward_decay = 0.75 # reward decay parameter eta
 
 
-    n_episodes = 200000
-    n_steps = 2048
+    # Choose training settings the model was trained on
+
+    n_episodes = 100 # number of training episodes
+    n_steps = 2048 
     batch_size = 64
     n_epochs = 10
-    lr = 0.00001
-    ent_coef = 0.001
+
+    # Choose hyperparameter settings the model was trained on
+
+    lr = 0.0003
+    ent_coef = 0.0
     clip_range = 0.2
+    n_layers=2
+    n_nodes=128
 
-    n_layers=3
-    n_nodes=64
 
-
+    # Choose evaluation settings
+    
+    n_eval_episodes = 10
+    render = False
 
 
     settings = {"N": N,
@@ -147,15 +157,13 @@ if __name__ == "__main__":
                 "reward_decay": reward_decay
                 }
     
-    n_eval_episodes = 1000
-    render = False
 
     
     
 
-    # Get log dir
+    # Get log dir to load model from
     log_dir = f"log_dir_model/"
-    model_path = f"best_model_{n_episodes=}_{N=}_{k_a=}_{k_s=}_{Rv=}_{n_steps=}_{batch_size=}_{n_epochs=}_{lr=}_{ent_coef=}_{clip_range=}_{max_timesteps=}_{swarm_factor=}_{collision_factor=}_{compactness_const=}_{reward_decay=}_{goal_reward=}_2"
+    model_path = f"best_model_{n_episodes=}_{n_nodes=}_{N=}_{k_a=}_{k_s=}_{Rv=}_{n_steps=}_{batch_size=}_{n_epochs=}_{lr=}_{ent_coef=}_{clip_range=}_{max_timesteps=}_{swarm_factor=}_{collision_factor=}_{compactness_const=}_{reward_decay=}_{goal_reward=}_2"
 
     # initialize environment
     env = DronesEnvironment(settings=settings, render_mode='rgb_array')

@@ -21,10 +21,9 @@ class DronesEnvironment(gym.Env):
         self.N = settings["N"] # N is the numer of drones the swarm consists of
         self.k_a = settings["k_a"] # k_a equally spaced angles for the actions in range [-theta_max, theta_max]
         self.k_s = settings["k_s"] # k_s equally spaced angles for the direction angle in the range [-pi, pi)
-        self.theta_max = settings["theta_max"]
+        self.theta_max = settings["theta_max"] # theta_max is the maximum turning angle
         self.boundary_width = settings["boundary_width"] # number of grid elements the boundary width consists of
         self.L = settings["L"] # size of grid of total enviroment (LxL)
-        self.window_size = self.L
         self.Rv = settings["Rv"] # visibility Radius for each drone
         self.La_x = settings["La_x"] # x-size of area A
         self.La_y = settings["La_y"] # y-size of area A
