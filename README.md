@@ -1,4 +1,4 @@
-# Drone_Swarms
+# Autonomous Drone Swarm Optimisation
 
 This repository reproduces the results from the Master Thesis: **"Optimising Group Alignment and Cohesion in Autonomous Drone Swarms for Targeted Military Exploration."** The research focuses on training reinforcement learning (RL) agents to manage the alignment and cohesion of drone swarms during military exploration missions.
 
