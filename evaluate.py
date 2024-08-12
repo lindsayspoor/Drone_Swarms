@@ -3,7 +3,6 @@ from stable_baselines3 import PPO
 from utils import plot_order_param, plot_grid_visits, plot_MSD
 from DronesEnv import DronesEnvironment
 from tqdm import tqdm
-import matplotlib.pyplot as plt
 
 
 
